@@ -1,6 +1,7 @@
 import logging
 import math
 import os
+import conveyance
 from unittest import TestCase
 
 import matplotlib.animation as animation
@@ -23,7 +24,7 @@ class TestRiverTools(TestCase):
         xs_list = river_tools.read_icm_cross_section_survey_section_array_csv(csv_path)
         xs_list = river_tools.icm_xs_add_offset(xs_list)
         for xs_name in ['BalzerC_Reach1_182_580', 'BalzerC_Reach1_4_000']:
-            df_check = pd.read_excel('./river/xs_sample.xlsx', '%s_xs' % xs_name)
+            df_check = pd.read_excel('./river/icm/xs_sample.xlsx', '%s_xs' % xs_name)
             df = xs_list[xs_name]
             np.testing.assert_almost_equal(df_check['X coordinate (m)'].values, df['X'].values, 3)
             np.testing.assert_almost_equal(df_check['Y coordinate (m)'].values, df['Y'].values, 3)
@@ -55,7 +56,8 @@ class TestRiverTools(TestCase):
         fig = river_tools.plot_xs(df, xs_name)
         out_png = os.path.join(output_folder, '%s.png' % 'test')
         fig.savefig(out_png)
-        self.fail()
+        plt.show()
+
 
     def test_icm_csv_to_coneyance_curve(self):
         csv_path = './river/icm/xs_sample_cross_section_survey_section_array.csv'
@@ -64,14 +66,9 @@ class TestRiverTools(TestCase):
         xs_list = river_tools.icm_xs_add_offset(xs_list)
         for k in xs_list:
             xs_name = str(k).replace('.', '_')
-            out_csv = os.path.join(output_folder, '%s.csv' % xs_name)
             df = xs_list[k]
-            df.to_csv(out_csv, index_label='no')
-            fig = river_tools.plot_xs(xs_list[k], k)
-            out_png = os.path.join(output_folder, '%s.png' % xs_name)
-            fig.savefig(out_png)
-            c = river_tools.conveyance_curve(df)
-            # TODO: plot curve numbers
+            fig = conveyance.plot_conveyance(df, xs_name)
+            fig.savefig(os.path.join(output_folder, '%s.png' % xs_name))
 
 
 

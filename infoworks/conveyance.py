@@ -34,7 +34,7 @@ def conveyance_at_level(xs, ys, ns, ps, level):
         logging.debug('processing line segment(starting from 1):%s' % i)
         pt1 = (x[i - 1], y[i - 1], n[i - 1], p[i - 1])
         pt2 = (x[i], y[i], n[i], p[i])
-        if pt1[3] == 1: # panel marker
+        if pt1[3] == 1:  # panel marker
             panel = pt1[0]
 
         line_result = calculate_line_segment(level, pt1, pt2, panel)
@@ -43,7 +43,8 @@ def conveyance_at_level(xs, ys, ns, ps, level):
             wp, ws, rn, area, panel = line_result
             wp_len = get_length([wp[0][0], wp[1][0]], [wp[0][1], wp[1][1]])
             ws_len = get_length([ws[0][0], ws[1][0]], [ws[0][1], ws[1][1]])
-            results.append(dict(zip(['wp', 'ws', 'wp_len', 'ws_len',  'n', 'area', 'panel'], [wp, ws, wp_len, ws_len, rn, area, panel])))
+            results.append(dict(
+                zip(['wp', 'ws', 'wp_len', 'ws_len', 'n', 'area', 'panel'], [wp, ws, wp_len, ws_len, rn, area, panel])))
 
         else:
             logging.info('water below the line')
@@ -74,6 +75,7 @@ def conveyance_curve(xs, ys, ns, ps):
     df['depth'] = df['level'] - min(ys)
     return df
 
+
 def get_panel(results):
     rows = []
     for panel in results['panel'].unique():
@@ -86,11 +88,6 @@ def get_panel(results):
         rows.append({'area': area, 'wp': wp, 'n': n_average, 'ws': ws, 'k': k, 'panel': panel})
     df = pd.DataFrame(rows)
     return df
-
-
-
-
-
 
 
 def calculate_line_segment(level, pt1, pt2, panel):
@@ -128,7 +125,7 @@ def calculate_line_segment(level, pt1, pt2, panel):
         if x0 == x1:
             pt = [x0, level]
         else:
-            if y0 == y1: #flat
+            if y0 == y1:  # flat
                 pt = [x1, y1]
             else:
                 pt = line_intersection([[x0, y0], [x1, y1]], [[x0, level], [x1, level]])
@@ -198,7 +195,7 @@ def plot_conveyance_curve(df, title='conveyance curve', xlabel='Conveyance', yla
 
     df['dk'] = df['k'].diff()
     df['dlevel'] = df['level'].diff()
-    df['dkdlevel'] = df['dk']/df['dlevel']
+    df['dkdlevel'] = df['dk'] / df['dlevel']
     fig = plt.plot(df['dk'], df['level'], marker='o')
     fig = plt.plot(df['dkdlevel'], df['level'], marker='o')
     plt.title(title)
@@ -223,7 +220,7 @@ def plot_conveyance(df, xs_name):
     sns.set()
 
     fig, axes = plt.subplots(2, 2, sharey='row', sharex='col',
-                                 gridspec_kw={'height_ratios': [1, 3], 'hspace': 0.01, 'wspace': 0.01}, figsize=(15,12))
+                             gridspec_kw={'height_ratios': [1, 3], 'hspace': 0.01, 'wspace': 0.01}, figsize=(15, 12))
     dk_ax = axes[0][1]
 
     shay = dk_ax.get_shared_y_axes()
@@ -231,7 +228,7 @@ def plot_conveyance(df, xs_name):
     dk_ax.yaxis.set_label_position("right")
     # dk_ax.yaxis.tick_right()
 
-    curve_ax = axes[1,1]
+    curve_ax = axes[1, 1]
     curve_ax.yaxis.set_label_position("right")
     # curve_ax.yaxis.tick_right()
 
@@ -244,7 +241,7 @@ def plot_conveyance(df, xs_name):
     zmin = min(df['Z'])
     # panel marker
     for x in df.loc[df['new_panel'] == 1, 'offset'].values:
-        axes[1][0].plot([x, x], [zmin, zmax],  linestyle='--', color='grey')
+        axes[1][0].plot([x, x], [zmin, zmax], linestyle='--', color='grey')
     axes[0][0].step(df['offset'], df['roughness_N'], where='post')
     axes[0][0].set_ylabel('Roughness')
     # conveyance curve
@@ -252,9 +249,8 @@ def plot_conveyance(df, xs_name):
     axes[1][1].set_xlabel('conveyance')
     axes[1][1].set_ylabel('Water Level', labelpad=10)
     # plot conveyance changes
-    df_convey['dk'] = df_convey['k'].diff()/df_convey['level'].diff()
+    df_convey['dk'] = df_convey['k'].diff() / df_convey['level'].diff()
     df_convey['dk'] = df_convey['dk'].fillna(0)
-
 
     for idx, r in df_convey.iterrows():
         c = r['k']
@@ -269,7 +265,7 @@ def plot_conveyance(df, xs_name):
         else:
             axes[0][1].plot([c, c], [0, dk], 'b-')
 
-    axes[0][1].set_ylabel('dk/dlevel') #, labelpad=20)
+    axes[0][1].set_ylabel('dk/dlevel')  # , labelpad=20)
     # a = min(df_convey['dk'].values)
     # b = max(df_convey['dk'].values)
     # c = (b - a)/10
