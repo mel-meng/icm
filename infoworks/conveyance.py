@@ -70,8 +70,8 @@ def conveyance_curve(xs, ys, ns, ps):
                     summary[v] = data[v].sum()
                 con_list.append(summary)
     df = pd.DataFrame(con_list)
-    df['el'] = df['level']
-    df['level'] = df['level'] - min(ys)
+
+    df['depth'] = df['level'] - min(ys)
     return df
 
 def get_panel(results):
@@ -204,4 +204,84 @@ def plot_conveyance_curve(df, title='conveyance curve', xlabel='Conveyance', yla
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    return fig
+
+
+def plot_conveyance(df, xs_name):
+    if not ('offset' in df.columns):
+        df['length'] = df.loc[:, ['X', 'Y']].diff().apply(lambda x: np.sqrt(x['X'] ** 2 + x['Y'] ** 2), axis=1).fillna(
+            0)
+        df['offset'] = df['length'].cumsum()
+    xs = df['offset'].values
+    ys = df['Z'].values
+    ns = df['roughness_N'].values
+    ps = df['new_panel'].values
+    df_convey = conveyance_curve(xs, ys, ns, ps)
+
+    rows = []
+
+    sns.set()
+
+    fig, axes = plt.subplots(2, 2, sharey='row', sharex='col',
+                                 gridspec_kw={'height_ratios': [1, 3], 'hspace': 0.01, 'wspace': 0.01}, figsize=(15,12))
+    dk_ax = axes[0][1]
+
+    shay = dk_ax.get_shared_y_axes()
+    shay.remove(dk_ax)
+    dk_ax.yaxis.set_label_position("right")
+    # dk_ax.yaxis.tick_right()
+
+    curve_ax = axes[1,1]
+    curve_ax.yaxis.set_label_position("right")
+    # curve_ax.yaxis.tick_right()
+
+    # sns.lineplot(x='offset', y='Z', data=df, ax=axes[1])
+    # cross section
+    axes[1][0].plot(df['offset'], df['Z'], marker='o')
+    axes[1][0].set_ylabel('Bed Elevation')
+    axes[1][0].set_xlabel('Offset')
+    zmax = max(df['Z'])
+    zmin = min(df['Z'])
+    # panel marker
+    for x in df.loc[df['new_panel'] == 1, 'offset'].values:
+        axes[1][0].plot([x, x], [zmin, zmax],  linestyle='--', color='grey')
+    axes[0][0].step(df['offset'], df['roughness_N'], where='post')
+    axes[0][0].set_ylabel('Roughness')
+    # conveyance curve
+    axes[1][1].plot(df_convey['k'], df_convey['level'], marker='o')
+    axes[1][1].set_xlabel('conveyance')
+    axes[1][1].set_ylabel('Water Level', labelpad=10)
+    # plot conveyance changes
+    df_convey['dk'] = df_convey['k'].diff()/df_convey['level'].diff()
+    df_convey['dk'] = df_convey['dk'].fillna(0)
+
+
+    for idx, r in df_convey.iterrows():
+        c = r['k']
+        l = r['level']
+        dk = r['dk']
+
+        if dk < 0:
+            axes[0][1].plot([c, c], [0, dk], 'r-')
+            axes[1][0].plot([min(df['offset'].values), max(df['offset'].values)], [l, l], 'r--')
+            axes[1][1].plot([min(df_convey['k'].values), max(df_convey['k'].values)], [l, l], 'r--')
+            axes[1][1].plot([c, c], [min(df_convey['level'].values), max(df_convey['level'].values)], 'g--')
+        else:
+            axes[0][1].plot([c, c], [0, dk], 'b-')
+
+    axes[0][1].set_ylabel('dk/dlevel') #, labelpad=20)
+    # a = min(df_convey['dk'].values)
+    # b = max(df_convey['dk'].values)
+    # c = (b - a)/10
+    # axes[0][1].yaxis.set_ticks(np.arange(a, b, c))
+    # axes[0][1].tick_params(colors='r')
+
+    # sf = (np.max(df_convey['k'].values) - np.min(df_convey['k'].values))/(np.max(dk.values) - np.min(dk.values))
+    # dk = dk*sf
+    # dk = dk - np.min(dk.values)
+    #
+    # axes[1][1].plot(dk, df_convey['level'], color='red', marker='x', linestyle='--')
+    fig.suptitle(xs_name)
+    plt.tight_layout()
+    plt.setp([a.get_xticklabels() for a in [axes[0][0], axes[0][1], axes[1][1]]], visible=True)
     return fig

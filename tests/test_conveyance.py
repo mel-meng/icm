@@ -228,6 +228,11 @@ class Test(TestCase):
         plot_line(vertical_down, 'vertical_down')
 
     def test_plot_conveyance_curve(self):
-        df = pd.read_csv('./river/conveyance_curve_test.csv')
-        conveyance.plot_conveyance_curve(df)
+        df = pd.read_csv('./river/icm/xs.csv')
+        conveyance.plot_conveyance(df, 'test')
+        plt.show()
+
+    def test_plot_conveyance_curve2(self):
+        df = pd.read_csv('./river/icm/xs_simple.csv')
+        conveyance.plot_conveyance(df, 'sample conveyance test')
         plt.show()
