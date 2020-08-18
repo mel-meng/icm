@@ -1,0 +1,10 @@
+UserSettings,U_VALUES,U_DATETIME,
+UserSettingsValues,MGD,mm-dd-yyyy hh:mm,
+G_START,G_TS,G_NPROFILES,
+1/1/2002 0:05,300,4,
+#profile,,,
+L_LINKID,L_CONDCAPACITY,L_PTITLE,file
+1,0,1,1
+2,0,2,2
+3,0,3,3
+4,0,4,4

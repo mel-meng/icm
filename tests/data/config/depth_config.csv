@@ -1,0 +1,20 @@
+UserSettings,U_LEVEL,U_CONDHEIGHT,U_VALUES,U_DATETIME,
+UserSettingsValues,ft AD,in,ft,mm-dd-yyyy hh:mm,
+G_START,G_TS,G_NPROFILES,,,
+3/1/2013 0:00,900,2,,,
+#profile,,,,,
+L_LINKID,L_INVERTLEVEL,L_CONDHEIGHT,L_GROUNDLEVEL,L_PTITLE,file
+FM 22b,753.39,30,762.13,22b sf,22b sf.csv
+FM 10a,729.073363,36,742.773363,10a sf,10a sf.csv
+FM 11,701.35,36,712.76,11 sf,11 sf.csv
+FM 8a,684.78,36,696.38,8a sf,8a sf.csv
+FM 26,802.27,30,807.84,26 sf,26 sf.csv
+FM 21b,757.152655,18,771.43,21b sf,21b sf.csv
+FM 10b,772.54,16,780.12,10b sf,10b sf.csv
+FM 27,811.46,27,820.82,27 sf,27 sf.csv
+FM 22a,730.87,30,742.986965,22a sf,22a sf.csv
+FM 21c,780.75,15,790.025513,21c sf,21c sf.csv
+FM 21e,771.77,12,779.95,21e sf,21e sf.csv
+FM 8b,717.07,24,725.47,8b sf,8b sf.csv
+FM 21a,742.351077,18,749.741077,21a sf,21a sf.csv
+FM 21d,791.53,12,796.78,21d sf,21d sf.csv

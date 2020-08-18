@@ -1,0 +1,20 @@
+UserSettings,U_VALUES,U_DATETIME,
+UserSettingsValues,MGD,mm-dd-yyyy hh:mm,
+G_START,G_TS,G_NPROFILES,
+3/1/2013 0:00,900,14,
+#profile,,,
+L_LINKID,L_CONDCAPACITY,L_PTITLE,file
+FM 22b,0,22b sf,22b sf.csv
+FM 10a,0,10a sf,10a sf.csv
+FM 11,0,11 sf,11 sf.csv
+FM 8a,0,8a sf,8a sf.csv
+FM 26,0,26 sf,26 sf.csv
+FM 21b,0,21b sf,21b sf.csv
+FM 10b,0,10b sf,10b sf.csv
+FM 27,0,27 sf,27 sf.csv
+FM 22a,0,22a sf,22a sf.csv
+FM 21c,0,21c sf,21c sf.csv
+FM 21e,0,21e sf,21e sf.csv
+FM 8b,0,8b sf,8b sf.csv
+FM 21a,0,21a sf,21a sf.csv
+FM 21d,0,21d sf,21d sf.csv

@@ -1,0 +1,14 @@
+FILECONT, TITLE,,,,,,
+0,   BV 2013 Rainfall,,,,,,
+UserSettings,U_ARD,U_EVAP,U_VALUES,U_DATETIME,,,
+UserSettingsValues,in,in/day,in/hr,mm-dd-yyyy hh:mm,,,
+G_START,G_TS,G_NPROFILES,G_UCWI,G_ARD,G_EVAP,G_WI,
+3/1/2013 0:00,900,17,0,0,0,2,
+#profile,,,,,,,
+L_UCWI,L_ARD,L_ARF,L_EVAP,L_WI,L_PTITLE,L_ADD,file
+          ,0,          ,0,     ,RG1,PROFILE=1                                         ,RG1.csv
+          ,0,          ,0,     ,RG2,PROFILE=2                                                                       ,RG2.csv
+          ,0,          ,0,     ,RG3,PROFILE=3                                                                       ,RG3.csv
+          ,0,          ,0,     ,RG4,PROFILE=4                                                                       ,RG4.csv
+          ,0,          ,0,     ,RG5,PROFILE=5                                                                       ,RG5.csv
+          ,0,          ,0,     ,RG6,PROFILE=6                                                                       ,RG6.csv
