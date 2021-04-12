@@ -108,6 +108,52 @@ def conveyance_curve(df):
     ps = df['new_panel'].values
     return conveyance.conveyance_curve(xs, ys, ns, ps)
 
+def read_conveyance_from_log(log_txt):
+    """
+
+Geometry for conduit 130.1:
+         h          a          b      db_dh          p      dp_dh          k      dk_dh       beta  d_beta_dh
+ 0.000E+00  0.000E+00  0.000E+00  3.069E+01  0.000E+00  4.026E+01  0.000E+00  0.000E+00  1.000E+00  0.000E+00
+ 4.454E-01  1.885E+00  5.859E+00  6.833E+00  5.978E+00  7.119E+00  5.821E+01  3.040E+02  1.000E+00  0.000E+00
+ ...
+Geometry for conduit 1349.1:
+Section 1:
+         h          a          b      db_dh          p      dp_dh          k      dk_dh       beta  d_beta_dh
+ 0.000E+00  5.000E-02  1.000E-01  1.861E+01  1.902E+00  1.693E+01  4.271E-01  1.192E-07  1.000E+00  0.000E+00
+...
+Section 2:
+         h          a          b      db_dh          p      dp_dh          k      dk_dh       beta  d_beta_dh
+ 0.000E+00  5.000E-02  1.000E-01  1.861E+01  1.902E+00  1.693E+01  4.271E-01  1.192E-07  1.000E+00  0.000E+00
+...
+    """
+    reaches = {}
+    reading_rows = False
+    with open(log_txt) as f:
+        for l in f:
+            if 'Geometry for conduit ' in l:
+                if reaches:
+                    reaches[reach] = sections
+                    logging.info('done processing reach: %s' % reach)
+                reach = l.split()[-1][:-1]
+                logging.info('processing reach: %s' % reach)
+
+                sections = {}
+            elif 'Section ' in l:
+                if sections:
+                    sections[section] = rows
+                    rows = []
+                section = l.split()[-1][:-1]
+            elif '         h          a          b      db_dh          p      dp_dh          k      dk_dh       beta  d_beta_dh' in l:
+                # it is the header
+                header = l.split()
+                reading_rows = True
+            else:
+                if len(l.split()!=10):
+                    reading_rows = False
+                if reading_rows:
+                    rows.append(l.split())
+        #TODO: FINISH THIS
+
 
 
 
